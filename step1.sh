@@ -11,6 +11,9 @@ function update_keyrings() {
 	pacman-key --init
 	pacman-key --populate archlinux artix
 	pacman -Scc
+	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/pkglist.txt
+	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/yaylist.txt
+	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/step2.sh
 }
 export -f update_keyrings
 function newl() {
@@ -57,6 +60,9 @@ newl
 basestrap /mnt base base-devel $INIT_SYS elogind-${INIT_SYS} linux linux-firmware
 
 fstabgen -U /mnt >> /mnt/etc/fstab
+mv step2.sh /mnt/
+mv pkglist.txt /mnt/
+mv yaylist.txt /mnt/
 artools-chroot /mnt # chroot into new system
 
 # after step2
