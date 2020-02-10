@@ -41,3 +41,4 @@ kde-applications
 cryfs
 sshfs
 figlet
+tldr
