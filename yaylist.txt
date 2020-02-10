@@ -1,0 +1,3 @@
+nvidia-xrun
+archlinux-themes-sddm
+ttf-vlogothic-ibx
