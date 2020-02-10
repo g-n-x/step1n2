@@ -5,7 +5,8 @@ update_keyrings
 clear
 echo "[--root--]:"
 passwd
-read -p "[--username: " USERNAME
+clear
+read -p "username: " USERNAME
 groupadd sudo
 useradd -m -G sudo $USERNAME
 passwd $USERNAME
@@ -26,7 +27,7 @@ grep "^Color" /etc/pacman.conf >/dev/null || sed -i "s/^#Color/Color/" /etc/pacm
 grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 
 # download all packages
-pacman -Syy --noconfirm - < pkglist.txt
+pacman -Syyu - < pkglist.txt
 # create repo dir and download yay pkgs
 mkdir /home/${USERNAME}/repo/
 cd /home/${USERNAME}/repo/
@@ -34,12 +35,11 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 cd /
-yay -S --noconfirm - < yaylist.txt
+yay -S - < yaylist.txt
 newl
 
 # enable s6 services
-s6-rc-bundle-update add default NetworkManager
-s6-rc-bundle-update add default sddm
+s6-rc-bundle add add my_bundle sddm NetworkManager
 # install grub
 grub-install --recheck $DISK_USED
 grub-mkconfig -o /boot/grub/grub.cfg
