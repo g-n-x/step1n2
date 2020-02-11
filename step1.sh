@@ -1,9 +1,16 @@
 #!/bin/sh
 
 # function declarations
+function newl() {
+	echo -e "\n"
+}
+export -f newl
 function update_config_and_keyrings() {
-	# initial config
+	clear
+	newl
 	echo "Downloading dependencies"
+	newl
+	# initial config
 	echo "Defaults env_reset,psfeedback" >> /etc/sudoers # allow password feedback
 	umount -l /etc/pacman.d/gnupg
 	pacman -Sy gnupg archlinux-keyring artix-keyring --noconfirm
@@ -18,10 +25,6 @@ function update_config_and_keyrings() {
 	PS1=""
 }
 export -f update_config_and_keyrings
-function newl() {
-	echo -e "\n"
-}
-export -f newl
 update_config_and_keyrings # to avoid corrupted packages + aesthetics
 pacman -Sy figlet parted --noconfirm
 clear
