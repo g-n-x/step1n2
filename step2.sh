@@ -9,7 +9,6 @@ clear
 read -p "username: " USERNAME
 groupadd sudo
 useradd -m -G sudo $USERNAME
-By default GrafX2 is b
 passwd $USERNAME
 
 newl
