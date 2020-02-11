@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # function declarations
-function update_keyrings() {
+function update_config_and_keyrings() {
 	# initial config
 	echo "Downloading dependencies"
 	echo "Defaults env_reset,psfeedback" >> /etc/sudoers # allow password feedback
@@ -10,20 +10,20 @@ function update_keyrings() {
 	rm -r /etc/pacman.d/gnupg
 	pacman-key --init
 	pacman-key --populate archlinux artix
-	pacman -Scc
+	pacman -Scc --noconfirm
 	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/pkglist.txt
 	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/yaylist.txt
 	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/step2.sh
+	reset # so pwfeedback is aplied
+	PS1=""
 }
-export -f update_keyrings
+export -f update_config_and_keyrings
 function newl() {
 	echo -e "\n"
 }
 export -f newl
-update_keyrings
+update_config_and_keyrings # to avoid corrupted packages + aesthetics
 pacman -Sy figlet parted --noconfirm
-reset # so pwfeedback is aplied
-PS1=""
 clear
 
 # banner
@@ -38,7 +38,6 @@ echo -e "Please select your init system of choice: \n \
 read -p "> " INIT_SYS
 echo "Your system will have $INIT_SYS as PID1 now"
 export INIT_SYS=$INIT_SYS
-
 
 newl
 
@@ -60,14 +59,20 @@ newl
 basestrap /mnt base base-devel $INIT_SYS elogind-${INIT_SYS} linux linux-firmware
 
 fstabgen -U /mnt >> /mnt/etc/fstab
+
+# move automation script files to new system
 mv step2.sh /mnt/
 mv pkglist.txt /mnt/
 mv yaylist.txt /mnt/
-artools-chroot /mnt # chroot into new system
+# chroot into new system
+# user will run source ./step2.sh in new system
+artools-chroot /mnt
 
-# after step2
+# this will run after step2.sh
 umount -R /mnt
 clear
+
+# finished
 figlet "Installation Complete!"
 echo "rebooting in 5s"
 sleep 5s
