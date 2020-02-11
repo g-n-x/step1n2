@@ -13,7 +13,7 @@ passwd $USERNAME
 
 newl
 
-# configure new system
+# configure new system as suggested by arch wiki
 ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 hwclock --systohc
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
@@ -22,7 +22,15 @@ echo "artix" > /etc/hostname
 echo -e "127.0.0.1\tlocalhost \
 	::1\tlocalhost \
 	127.0.0.1\tartix.localdomain artix" >> /etc/hosts
-#TODO: COMMENT GLOBAL MIRRORS (possible cause of download problem)
+# this makes my touchpad works, probably others too idk
+echo -e "Section \"Input Class\" \
+	\tIdentifier \"MyTouchpad\" \
+	\tMatchIsTouchpad \"on\"
+	\tDriver \"libinput\"
+	\tOption \"Tapping\" \"on\"
+	\tOption \"HorizontalScrolling\" \"0\"
+	EndSection" >> /etc/X11/xorg.conf.d/30-touchpad.conf
+#TODO: write sed command to disable worldwide mirrors and enable br ones excluding the first
 sed -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
 sed -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch # add all brazilian mirrors
 # copied from LARBS
@@ -32,20 +40,20 @@ grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILo
 # download all packages
 pacman -Syyu --ignore xorg-server-xdmx --noconfirm - < pkglist.txt
 
-sed 's/# %sudo/%sudo/' /etc/sudoers
+sed 's/# %sudo/%sudo/' /etc/sudoers # TODO: idk why but i think this didnt work (tofix)
 
-# create repo dir and download yay pkgs
-mkdir /home/${USERNAME}/repo/
-cd /home/${USERNAME}/repo/
-git clone https://aur.archlinux.org/yay.git
-cd yay
-sudo -u $USERNAME makepkg -si
-cd /
-yay -S --noconfirm - < yaylist.txt
+# yay dont work as root sooooo whatever
+#mkdir /home/${USERNAME}/repo/
+#cd /home/${USERNAME}/repo/
+#git clone https://aur.archlinux.org/yay.git
+#cd yay
+#sudo -u $USERNAME makepkg -si
+#cd /
+#yay -S --noconfirm - < yaylist.txt
 newl
 
 # enable s6 services
-s6-rc-bundle add add my_bundle sddm NetworkManager
+s6-rc-bundle add add my_bundle sddm NetworkManager # TODO: this dont work as well, gotta learn s6
 # install grub
 grub-install --recheck $DISK_USED
 grub-mkconfig -o /boot/grub/grub.cfg
