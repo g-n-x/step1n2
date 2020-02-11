@@ -1,5 +1,7 @@
 #!/bin/sh
 
+loadkeys br-abnt2 # bcuz yes
+
 # function declarations
 function newl() {
 	echo -e "\n"
