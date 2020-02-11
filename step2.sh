@@ -1,5 +1,5 @@
 
-update_keyrings
+update_config_and_keyrings
 
 # user creation
 clear
@@ -23,6 +23,7 @@ echo -e "127.0.0.1\tlocalhost \
 	::1\tlocalhost \
 	127.0.0.1\tartix.localdomain artix" >> /etc/hosts
 #TODO: COMMENT GLOBAL MIRRORS (possible cause of download problem)
+sed -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
 sed -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch
 grep "^Color" /etc/pacman.conf >/dev/null || sed -i "s/^#Color/Color/" /etc/pacman.conf
 grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
