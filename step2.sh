@@ -9,6 +9,7 @@ clear
 read -p "username: " USERNAME
 groupadd sudo
 useradd -m -G sudo $USERNAME
+By default GrafX2 is b
 passwd $USERNAME
 
 newl
@@ -30,7 +31,7 @@ grep "^Color" /etc/pacman.conf >/dev/null || sed -i "s/^#Color/Color/" /etc/pacm
 grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 
 # download all packages
-pacman -Syyu --noconfirm - < pkglist.txt
+pacman -Syyu --ignore xorg-server-xdmx --noconfirm - < pkglist.txt
 # create repo dir and download yay pkgs
 mkdir /home/${USERNAME}/repo/
 cd /home/${USERNAME}/repo/
