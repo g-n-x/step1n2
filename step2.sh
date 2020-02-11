@@ -31,6 +31,8 @@ grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILo
 
 # download all packages
 pacman -Syyu --ignore xorg-server-xdmx --noconfirm - < pkglist.txt
+sed 's/# %sudo/%sudo/' /etc/sudoers
+su $USERNAME
 # create repo dir and download yay pkgs
 mkdir /home/${USERNAME}/repo/
 cd /home/${USERNAME}/repo/
