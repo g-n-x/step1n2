@@ -1,13 +1,11 @@
 #!/bin/sh
-
-loadkeys br-abnt2 # bcuz yes
-
 # function declarations
 function newl() {
 	echo -e "\n"
 }
 export -f newl
 function update_config_and_keyrings() {
+	loadkeys br-abnt2 # bcuz yes
 	clear
 	newl
 	echo "Downloading dependencies"
