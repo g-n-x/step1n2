@@ -24,12 +24,13 @@ echo -e "127.0.0.1\tlocalhost \
 	127.0.0.1\tartix.localdomain artix" >> /etc/hosts
 #TODO: COMMENT GLOBAL MIRRORS (possible cause of download problem)
 sed -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
-sed -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch
+sed -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch # add all brazilian mirrors
+# copied from LARBS
 grep "^Color" /etc/pacman.conf >/dev/null || sed -i "s/^#Color/Color/" /etc/pacman.conf
 grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 
 # download all packages
-pacman -Syyu - < pkglist.txt
+pacman -Syyu --noconfirm - < pkglist.txt
 # create repo dir and download yay pkgs
 mkdir /home/${USERNAME}/repo/
 cd /home/${USERNAME}/repo/
@@ -37,7 +38,7 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 cd /
-yay -S - < yaylist.txt
+yay -S --noconfirm - < yaylist.txt
 newl
 
 # enable s6 services
