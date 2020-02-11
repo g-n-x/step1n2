@@ -45,10 +45,9 @@ newl
 lsblk | echo -e "Available disks:\n \
 	/dev/`awk '/disk/{print$1};'`"
 read -p "> " DISK_USED
-# TODO: parted is not functioning properly
 parted ${DISK_USED} mklabel msdos
 parted ${DISK_USED} mkpart primary ext4 1MiB 100%
-mkfs.ext4 ${DISK_USED}1
+echo y|mkfs.ext4 ${DISK_USED}1
 mount ${DISK_USED}1 /mnt
 echo "$DISK_USED is your new-system's home"
 export DISK_USED=$DISK_USED
