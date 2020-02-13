@@ -40,9 +40,11 @@ intel-ucode
 libreoffice-fresh
 htop
 ntfs-3g
+youtube-dl
 plasma
 sddm-kcm
 kde-applications
+artix-sddm-theme
 cryfs
 sshfs
 figlet

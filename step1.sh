@@ -11,13 +11,14 @@ function update_config_and_keyrings() {
 	echo "Downloading dependencies"
 	newl
 	# initial config
-	echo "Defaults env_reset,psfeedback" >> /etc/sudoers # allow password feedback
+	echo "Defaults env_reset,pwfeedback" >> /etc/sudoers # allow password feedback
 	umount -l /etc/pacman.d/gnupg
 	pacman -Sy gnupg archlinux-keyring artix-keyring --noconfirm
 	rm -r /etc/pacman.d/gnupg
 	pacman-key --init
 	pacman-key --populate archlinux artix
 	pacman -Scc --noconfirm
+	pacman -S wget --noconfirm
 	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/pkglist.txt
 	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/yaylist.txt
 	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/step2.sh
@@ -25,50 +26,61 @@ function update_config_and_keyrings() {
 	PS1=""
 }
 export -f update_config_and_keyrings
-update_config_and_keyrings # to avoid corrupted packages + aesthetics
-pacman -Sy figlet parted --noconfirm
-clear
+function base_install() {
+    update_config_and_keyrings # to avoid corrupted packages + aesthetics
+    pacman -Sy figlet parted --noconfirm
+    clear
+    # banner
+    figlet Artix Linux auto-installation
 
-# banner
-figlet Artix Linux auto-installation
+    # init selection
+    echo -e "Please select your init system of choice: \n \
+        openrc\n \
+        runit\n \
+        s6"
+    read -p "> " INIT_SYS
+    echo "Your system will have $INIT_SYS as PID1 now"
+    export INIT_SYS=$INIT_SYS
 
-# init selection
-echo -e "Please select your init system of choice: \n \
-	openrc\n \
-	runit\n \
-	s6"
+    newl
 
-read -p "> " INIT_SYS
-echo "Your system will have $INIT_SYS as PID1 now"
-export INIT_SYS=$INIT_SYS
+    # linux selection
+    echo -e "Which Linux:\n \
+        linux-lts\n \
+        linux"
+    read -p "> " LINUX_TYPE
+    export LINUX_TYPE=$LINUX_TYPE
+    
+    newl
+    # partition creation
+    lsblk | echo -e "Available disks:\n \
+        /dev/`awk '/disk/{print$1};'`"
+    read -p "> " DISK_USED
+    parted ${DISK_USED} mklabel msdos
+    parted ${DISK_USED} mkpart primary ext4 1MiB 100%
+    echo y|mkfs.ext4 ${DISK_USED}1
+    mount ${DISK_USED}1 /mnt
+    echo "$DISK_USED is your new-system's home"
+    export DISK_USED=$DISK_USED
 
-newl
+    newl
 
-# partition creation
-lsblk | echo -e "Available disks:\n \
-	/dev/`awk '/disk/{print$1};'`"
-read -p "> " DISK_USED
-parted ${DISK_USED} mklabel msdos
-parted ${DISK_USED} mkpart primary ext4 1MiB 100%
-echo y|mkfs.ext4 ${DISK_USED}1
-mount ${DISK_USED}1 /mnt
-echo "$DISK_USED is your new-system's home"
-export DISK_USED=$DISK_USED
+    # base system
+    basestrap /mnt base base-devel $INIT_SYS elogind-${INIT_SYS} $LINUX_TYPE linux-firmware
 
-newl
+    fstabgen -U /mnt >> /mnt/etc/fstab
 
-# base system
-basestrap /mnt base base-devel $INIT_SYS elogind-${INIT_SYS} linux linux-firmware
+    # move automation script files to new system
+    mv step2.sh /mnt/
+    mv pkglist.txt /mnt/
+    mv yaylist.txt /mnt/
+    # chroot into new system and source ./step2.sh in new system
+    artools-chroot /mnt chmod 755 step2.sh
+    artools-chroot /mnt /step2.sh
+}
 
-fstabgen -U /mnt >> /mnt/etc/fstab
-
-# move automation script files to new system
-mv step2.sh /mnt/
-mv pkglist.txt /mnt/
-mv yaylist.txt /mnt/
-# chroot into new system
-# user will run source ./step2.sh in new system
-artools-chroot /mnt
+# call the main function
+base_install
 
 # this will run after step2.sh
 umount -R /mnt

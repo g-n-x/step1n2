@@ -23,16 +23,16 @@ echo -e "127.0.0.1\tlocalhost \
 	::1\tlocalhost \
 	127.0.0.1\tartix.localdomain artix" >> /etc/hosts
 # this makes my touchpad works, probably others too idk
-echo -e "Section \"Input Class\" \
-	\tIdentifier \"MyTouchpad\" \
-	\tMatchIsTouchpad \"on\"
-	\tDriver \"libinput\"
-	\tOption \"Tapping\" \"on\"
-	\tOption \"HorizontalScrolling\" \"0\"
-	EndSection" >> /etc/X11/xorg.conf.d/30-touchpad.conf
+echo -e "Section \"Input Class\"\n \
+\tIdentifier \"MyTouchpad\"\n \
+\tMatchIsTouchpad \"on\"
+\tDriver \"libinput\"
+\tOption \"Tapping\" \"on\"
+\tOption \"HorizontalScrolling\" \"0\"
+EndSection" > /etc/X11/xorg.conf.d/30-touchpad.conf
 #TODO: write sed command to disable worldwide mirrors and enable br ones excluding the first
-sed -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
-sed -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch # add all brazilian mirrors
+sed -i -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
+sed -i -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch # add all brazilian mirrors
 # copied from LARBS
 grep "^Color" /etc/pacman.conf >/dev/null || sed -i "s/^#Color/Color/" /etc/pacman.conf
 grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
