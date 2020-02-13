@@ -33,7 +33,7 @@ EndSection" > /etc/X11/xorg.conf.d/30-touchpad.conf
 #TODO: write sed command to disable worldwide mirrors and enable br ones excluding the first
 sed -i -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
 sed -i -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch # add all brazilian mirrors
-sed -i -e 's/#Server = http://br.mirror.archlinux-br.org/$repo/os/$arch/Server = http://br.mirror.archlinux-br.org/$repo/os/$arch/' /etc/pacman.d/mirrorlist-arch # hardcoded bcuz this mirror is bad and i dont know how to do this efficiently
+sed -i -e 's_Server = http://br.mirror.archlinux-br.org/$repo/os/$arch_#Server = http://br.mirror.archlinux-br.org/$repo/os/$arch_' mirrorlist-arch # hardcoded bcuz this mirror is bad and i dont know how to do this efficiently
 # copied from LARBS
 grep "^Color" /etc/pacman.conf >/dev/null || sed -i "s/^#Color/Color/" /etc/pacman.conf
 grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
