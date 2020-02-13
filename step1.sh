@@ -41,6 +41,8 @@ function base_install() {
     read -p "> " INIT_SYS
     echo "Your system will have $INIT_SYS as PID1 now"
     export INIT_SYS=$INIT_SYS
+    
+    sed -n -i 's/s6/${INIT_SYS}/' pkglist.txt
 
     newl
 
