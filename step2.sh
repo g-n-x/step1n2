@@ -53,10 +53,14 @@ sed 's/# %sudo/%sudo/' /etc/sudoers # TODO: idk why but i think this didnt work 
 #yay -S --noconfirm - < yaylist.txt
 newl
 
+echo "ok ill try to do shit now"
+
+newl
+
 # enable s6 services
 s6-rc-bundle add add my_bundle sddm NetworkManager # TODO: this dont work as well, gotta learn s6
 # install grub
 grub-install --recheck $DISK_USED
 grub-mkconfig -o /boot/grub/grub.cfg
 
-exit
+#exit
