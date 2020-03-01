@@ -43,7 +43,8 @@ function base_install() {
     export INIT_SYS=$INIT_SYS
     
     # removed -n switch bcuz it makes the file go emptyy
-    sed -i 's/s6/${INIT_SYS}/' pkglist.txt
+    # why im using double quotes: https://askubuntu.com/questions/76808/how-do-i-use-variables-in-a-sed-command
+    sed -i "s/s6/$INIT_SYS/" pkglist.txt
 
     newl
 
