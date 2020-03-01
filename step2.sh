@@ -41,7 +41,7 @@ grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILo
 # download all packages
 pacman -Syyu --ignore xorg-server-xdmx --noconfirm - < pkglist.txt
 
-sed 's/# %sudo/%sudo/' /etc/sudoers # TODO: idk why but i think this didnt work (tofix)
+sed -i 's/# %sudo/%sudo/' /etc/sudoers
 
 # yay dont work as root sooooo whatever
 #mkdir /home/${USERNAME}/repo/
