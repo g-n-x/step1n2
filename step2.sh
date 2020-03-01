@@ -19,9 +19,9 @@ hwclock --systohc
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 echo "KEYMAP=br-abnt2" > /etc/vconsole.conf
 echo "artix" > /etc/hostname
-echo -e "127.0.0.1\tlocalhost \
-	::1\tlocalhost \
-	127.0.0.1\tartix.localdomain artix" >> /etc/hosts
+echo -e "127.0.0.1\tlocalhost\n\
+::1\t\tlocalhost\n\
+127.0.0.1\tartix.localdomain artix" >> /etc/hosts
 # this makes my touchpad works, probably others too idk
 echo -e "Section \"Input Class\"\n \
 \tIdentifier \"MyTouchpad\"\n \
