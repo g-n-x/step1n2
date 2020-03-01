@@ -42,7 +42,8 @@ function base_install() {
     echo "Your system will have $INIT_SYS as PID1 now"
     export INIT_SYS=$INIT_SYS
     
-    sed -n -i 's/s6/${INIT_SYS}/' pkglist.txt
+    # removed -n switch bcuz it makes the file go emptyy
+    sed -i 's/s6/${INIT_SYS}/' pkglist.txt
 
     newl
 
