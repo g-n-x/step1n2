@@ -22,14 +22,7 @@ echo "artix" > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n\
 ::1\t\tlocalhost\n\
 127.0.0.1\tartix.localdomain artix" >> /etc/hosts
-# this makes my touchpad works, probably others too idk
-echo -e "Section \"Input Class\"\n \
-\tIdentifier \"MyTouchpad\"\n \
-\tMatchIsTouchpad \"on\"
-\tDriver \"libinput\"
-\tOption \"Tapping\" \"on\"
-\tOption \"HorizontalScrolling\" \"0\"
-EndSection" > /etc/X11/xorg.conf.d/30-touchpad.conf
+
 #TODO: write sed command to disable worldwide mirrors and enable br ones excluding the first
 sed -i -e 's/^[^#]/#/' /etc/pacman.d/mirrorlist-arch # possible fix? idk
 sed -i -e '/Brazil/,/^$/{//!s/^#//' -e '}' /etc/pacman.d/mirrorlist-arch # add all brazilian mirrors
@@ -40,6 +33,16 @@ grep "ILoveCandy" /etc/pacman.conf >/dev/null || sed -i "/#VerbosePkgLists/a ILo
 
 # download all packages
 pacman -Syyu --ignore xorg-server-xdmx --noconfirm - < pkglist.txt
+
+# this makes my touchpad works, probably others too idk
+# btw this is here bcuz cant insert file if there is no folder
+echo -e "Section \"Input Class\"\n \
+\tIdentifier \"MyTouchpad\"\n \
+\tMatchIsTouchpad \"on\"
+\tDriver \"libinput\"
+\tOption \"Tapping\" \"on\"
+\tOption \"HorizontalScrolling\" \"0\"
+EndSection" > /etc/X11/xorg.conf.d/30-touchpad.conf
 
 sed -i 's/# %sudo/%sudo/' /etc/sudoers
 
