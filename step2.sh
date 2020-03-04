@@ -61,7 +61,7 @@ echo "ok ill try to do shit now"
 newl
 
 # enable s6 services
-s6-rc-bundle add add my_bundle sddm NetworkManager # TODO: this dont work as well, gotta learn s6
+s6-rc-bundle -c /etc/s6/rc/compiled add default sddm NetworkManager
 # install grub
 grub-install --recheck $DISK_USED
 grub-mkconfig -o /boot/grub/grub.cfg
