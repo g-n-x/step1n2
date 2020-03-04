@@ -44,6 +44,14 @@ echo -e "Section \"Input Class\"\n \
 \tOption \"HorizontalScrolling\" \"0\"
 EndSection" > /etc/X11/xorg.conf.d/30-touchpad.conf
 
+#optout from dotnet telemetry
+echo "DOTNET_CLI_TELEMETRY_OPTOUT=1" >> /home/$USERNAME/.bashrc
+
+#so fcitx works properly
+echo -e "GTK_IM_MODULE=fcitx\n\
+QT_IM_MODULE=fcitx\n\
+XMODIFIERS=@im=fcitx" >> /home/$USERNAME/.pam_environment
+
 sed -i 's/# %sudo/%sudo/' /etc/sudoers
 
 # yay dont work as root sooooo whatever
