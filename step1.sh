@@ -19,9 +19,11 @@ function update_config_and_keyrings() {
 	pacman-key --populate archlinux artix
 	pacman -Scc --noconfirm
 	pacman -S wget --noconfirm
-	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/pkglist.txt
-	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/yaylist.txt
-	wget https://raw.githubusercontent.com/g-n-x/step1n2/master/step2.sh
+	
+	# changed from wget to curl bcuz of libnettle.so.8 problems
+	curl https://raw.githubusercontent.com/g-n-x/step1n2/master/pkglist.txt -o pkglist.txt
+	curl https://raw.githubusercontent.com/g-n-x/step1n2/master/yaylist.txt -o yaylist.txt
+	curl https://raw.githubusercontent.com/g-n-x/step1n2/master/step2.sh -o step2.sh
 	reset # so pwfeedback is aplied
 	PS1=""
 }
